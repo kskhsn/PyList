@@ -45,6 +45,9 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PyArray.cs" />
+    <Compile Include="PyArrayAsUser.cs" />
+    <Compile Include="PyList.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
