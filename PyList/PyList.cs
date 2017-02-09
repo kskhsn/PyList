@@ -183,7 +183,7 @@ namespace PyList
             var temp = new PyList<T>(list);
             if (temp.Count != 0)
             {
-                for (int i = 0; i < rate; i++)
+                for (int i = 0; i < rate-1; i++)
                     foreach (var item in list)
                         temp.Add(item);
             }
@@ -193,12 +193,28 @@ namespace PyList
                 {
                     temp.Add(default(T));
                 }
-
             }
             return temp;
         }
 
-
+        static public PyList<T> operator *(int rate,PyList<T> list)
+        {   
+            var temp = new PyList<T>(list);
+            if (temp.Count != 0)
+            {
+                for (int i = 0; i < rate - 1; i++)
+                    foreach (var item in list)
+                        temp.Add(item);
+            }
+            else
+            {
+                for (int i = 0; i < rate; i++)
+                {
+                    temp.Add(default(T));
+                }
+            }
+            return temp;
+        }
 
 
     }

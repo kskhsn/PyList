@@ -49,7 +49,7 @@ namespace PyList
             pyList.Add(103);
             pyList.Add(104);
 
-            var pyList3pyList1 = pyList[-1];//104
+            var pyList1 = pyList[-1];//104
             var pyList2 = pyList[0];//100
             var pyList3 = pyList[1];//101
             var pyList4 = pyList[1,3];//[101,102,103]
@@ -61,11 +61,13 @@ namespace PyList
             pyList[3,ListIndex.Empty] = 99;
 
             var ppp = new PyList<int>(new int[] { 10, 99 });
-
+            var ppp1 = new PyList<int>(new int[] { 10, 99 }) * 2;
             var ppp2 = ppp * 3;
 
             var ppp3 = PyList<int>.Empty();//[0]とどっちがいいのだろうか？
             var ppp4 = PyList<int>.Empty()*10;
+            var ppp5 =new PyList<int>() { 1 } * 10;
+            var ppp6 = 10 * new PyList<int>() { 1 };
 
             var a = ppp4.ToArray();
           
