@@ -13,16 +13,16 @@ namespace PyList
             //0,1,2,3,4]
             var intArray = Enumerable.Range(0, 5).ToArray();
 
-            var i_1 = intArray.PyGet(-1);//4
-            var i_2 = intArray.PyGet(-2);//3
-            var i_3 = intArray.PyGet(-3);//2
-            var i_4 = intArray.PyGet(-4);//1
-            var i_5 = intArray.PyGet(-5);//0
-            var i_6 = intArray.PyGet(0);//0
-            var i_7 = intArray.PyGet(1);//1
-            var i_8 = intArray.PyGet(2);//2
-            var i_9 = intArray.PyGet(3);//3
-            var i_10 = intArray.PyGet(4);//4
+            var i_1 = intArray.AsPyGet(-1);//4
+            var i_2 = intArray.AsPyGet(-2);//3
+            var i_3 = intArray.AsPyGet(-3);//2
+            var i_4 = intArray.AsPyGet(-4);//1
+            var i_5 = intArray.AsPyGet(-5);//0
+            var i_6 = intArray.AsPyGet(0);//0
+            var i_7 = intArray.AsPyGet(1);//1
+            var i_8 = intArray.AsPyGet(2);//2
+            var i_9 = intArray.AsPyGet(3);//3
+            var i_10 = intArray.AsPyGet(4);//4
 
             var pyArray = new PyArray<int>(4)
             {
@@ -41,8 +41,7 @@ namespace PyList
             Console.WriteLine("slice");
             foreach (var v in pyArray.Slice(1, 2))
                 Console.WriteLine(v);
-
-
+          
             var pyList = new PyList<int>();
             pyList.Add(100);
             pyList.Add(101);
@@ -50,10 +49,26 @@ namespace PyList
             pyList.Add(103);
             pyList.Add(104);
 
-            var pyList1 = pyList[-1];//104
+            var pyList3pyList1 = pyList[-1];//104
             var pyList2 = pyList[0];//100
             var pyList3 = pyList[1];//101
+            var pyList4 = pyList[1,3];//[101,102,103]
+            var pyList5 = pyList[2,ListIndex.Empty];//[102,103,104]
+            var pyList6 = pyList[ListIndex.Empty, 1];//[100]
+            pyList[2, 4] = 1;
+            pyList[ListIndex.Empty, 2] = 88;
+            pyList[ListIndex.Empty, 99] = 123;
+            pyList[3,ListIndex.Empty] = 99;
 
+            var ppp = new PyList<int>(new int[] { 10, 99 });
+
+            var ppp2 = ppp * 3;
+
+            var ppp3 = PyList<int>.Empty();//[0]とどっちがいいのだろうか？
+            var ppp4 = PyList<int>.Empty()*10;
+
+            var a = ppp4.ToArray();
+          
 
             Console.WriteLine("pylist");
             foreach (var v in pyList)
@@ -61,8 +76,7 @@ namespace PyList
             Console.WriteLine("slice");
             foreach (var v in pyList.Slice(1, 2))
                 Console.WriteLine(v);
-
-
+            
 
 
         }

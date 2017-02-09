@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace PyList
 {
-    class PyArray<T> : IEnumerable<T>
+    [Obsolete("PyListの更新に追いついていません。")]
+    public class PyArray<T> : IEnumerable<T>
     {
+       
         public PyArray(int size)
         {
             if (size < 0)

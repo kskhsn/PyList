@@ -8,7 +8,7 @@ namespace PyList
 {
     static class PyArrayAsUse
     {
-        static public T PyGet<T>(this T[] array, int index)
+        static public T AsPyGet<T>(this T[] array, int index)
         {
             if (-1 < index && index < array.Length)
                 return array[index];
@@ -18,7 +18,7 @@ namespace PyList
                 throw new IndexOutOfRangeException();
         }
 
-        static public T PyGet<T>(this IList<T> list, int index)
+        static public T AsPyGet<T>(this IList<T> list, int index)
         {
             if (-1 < index && index < list.Count)
                 return list[index];
@@ -28,7 +28,7 @@ namespace PyList
                 throw new IndexOutOfRangeException();
         }
 
-        static public void PySet<T>(this IList<T> list, int index, T value)
+        static public void AsPySet<T>(this IList<T> list, int index, T value)
         {
             if (-1 < index && index < list.Count)
                 list[index] = value;
@@ -37,7 +37,7 @@ namespace PyList
             else
                 throw new ArgumentOutOfRangeException();
         }
-        static public void PySet<T>(this T[] array, int index, T value)
+        static public void AsPySet<T>(this T[] array, int index, T value)
         {
             if (-1 < index && index < array.Length)
                 array[index] = value;
@@ -66,10 +66,10 @@ namespace PyList
             throw new ArgumentOutOfRangeException();
         }
 
-        static public T[] GetArray<T>(this IEnumerable<T> values, int start, int end) => values.GetEnumerable(start, end).ToArray();
+        static public T[] ToArray<T>(this IEnumerable<T> values, int start, int end) => values.GetEnumerable(start, end).ToArray();
 
-        static public List<T> GetList<T>(this IEnumerable<T> values, int start, int end) => values.GetEnumerable(start, end).ToList();
 
+        static public List<T> ToList<T>(this IEnumerable<T> values, int start, int end) => values.GetEnumerable(start, end).ToList();
 
     }
 

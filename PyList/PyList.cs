@@ -7,10 +7,23 @@ using System.Threading.Tasks;
 
 namespace PyList
 {
-    class PyList<T> : IList<T>
+
+
+    static public class PyListHelper
     {
+        static public PyList<T> ToPyList<T>(this IEnumerable<T> values) => new PyList<T>(values);
+        
+    }
+
+    public enum ListIndex { Empty }
+
+    public class PyList<T> :IList<T>
+    {
+        static public PyList<T> Empty() => new PyList<T>();
+
+
         public PyList()
-        {
+        {   
             this.list = new List<T>();
         }
 
@@ -28,26 +41,71 @@ namespace PyList
 
         public T this[int index]
         {
+            get { return this.list[this.CalcIndex(index)]; }
+            set { this.list[this.CalcIndex(index)] = value; }
+        }
+
+        public PyList<T> this[int start, int end]
+        {
             get
             {
-                if (-1 < index && index < this.list.Count)
-                    return this.list[index];
-                else if (index < 0 && -this.list.Count <= index)
-                    return this.list[this.list.Count + index];
-                else
-                    throw new ArgumentOutOfRangeException();
-            }
+                start = this.CalcIndexSafe(start);
+                end = this.CalcIndexSafe(end);
 
+                if (start < end)
+                {
+                    return new PyList<T>(this.list.Skip(start).Take(end - start + 1));
+                }
+                else
+                    return PyList<T>.Empty();
+            }
             set
             {
-                if (-1 < index && index < this.list.Count)
-                    this.list[index] = value;
-                else if (index < 0 && -this.list.Count <= index)
-                    this.list[this.list.Count + index] = value;
-                else
-                    throw new ArgumentOutOfRangeException();
+                start = this.CalcIndexSafe(start);
+                end = this.CalcIndexSafe(end);
+                for (int i = start; i < end; i++)
+                {
+                    this.list[i] = value[0];
+                }
             }
+
         }
+
+        public PyList<T> this[ListIndex start, int end]
+        {
+            get { return new PyList<T>(this.list.Take(this.CalcIndexSafe(end))); }
+            set { this[0, end] = value; }
+        }
+
+        public PyList<T> this[int start, ListIndex end]
+        {
+            get { return new PyList<T>(this.list.Skip(this.CalcIndexSafe(start))); }
+            set { this[start, this.list.Count] = value; }
+        }
+
+
+        private int CalcIndex(int index)
+        {
+            if (-1 < index && index < this.list.Count)
+                return index;
+            else if (index < 0 && -this.list.Count <= index)
+                return this.list.Count + index;
+            else
+                throw new ArgumentOutOfRangeException();
+        }
+
+        private int CalcIndexSafe(int index)
+        {
+            if (index < -this.list.Count)
+                return 0;
+            else if (index < 0)
+                return this.list.Count + index;
+            else if (index < this.list.Count)
+                return index;
+            else
+                return this.list.Count;
+        }
+
 
         public int Count => this.list.Count;
 
@@ -84,8 +142,6 @@ namespace PyList
             this.list.RemoveAt(index);
         }
 
-        IEnumerator IEnumerable.GetEnumerator() => this.list.GetEnumerator();
-
 
         public PyList<T> Slice(int start, int end)
         {
@@ -98,7 +154,7 @@ namespace PyList
 
                 if (start < end)
                 {
-                    var length = end - start + 1;
+                    var length = end - start;
                     return new PyList<T>(this.list.Skip(start).Take(length));
                 }
             }
@@ -106,6 +162,44 @@ namespace PyList
         }
 
         public override string ToString() => $"[{string.Join(",", this.list)}]";
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
+
+        /// <summary>
+        /// <para>この定義によりで無理やり代入を実装</para>
+        /// <para>これによりlist[3,5]=5のような書き方が可能</para>
+        /// </summary>
+        /// <param name="value"></param>
+        static public implicit operator PyList<T>(T value)
+        {
+            return new PyList<T>() { value };
+        }
+
+        static public PyList<T> operator *(PyList<T> list, int rate)
+        {
+            var temp = new PyList<T>(list);
+            if (temp.Count != 0)
+            {
+                for (int i = 0; i < rate; i++)
+                    foreach (var item in list)
+                        temp.Add(item);
+            }
+            else
+            {
+                for (int i = 0; i < rate; i++)
+                {
+                    temp.Add(default(T));
+                }
+
+            }
+            return temp;
+        }
+
+
+
 
     }
 }
